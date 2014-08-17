@@ -1,27 +1,16 @@
-﻿using Xceed.Wpf.Toolkit;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Media;
 using System.Windows.Shell;
 using System.Reflection;
-using System.IO;
-
+using WindowState = System.Windows.WindowState;
 
 namespace YAPA
 {
@@ -32,20 +21,15 @@ namespace YAPA
     {
         DispatcherTimer dispacherTime = new DispatcherTimer();
         Stopwatch stopWatch = new Stopwatch();
+        ItemRepository itemRepository = new ItemRepository();
 
         private ICommand _showSettings;
         private Storyboard TimerFlush;
-        private Brush _textBrush;
-        private double _clockOpacity;
-        private double _shadowOpacity;
-        private int _workTime;
-        private int _breakTime;
-        private int _breakLongTime;
-        private bool _soundEfects;
+
         private double _progressValue;
         private string _progressState;
         private int Ticks;
-        private int Period;
+        private int _period;
         private bool IsBreak;
         private bool IsBreakLong;
         private bool IsWork;
@@ -63,13 +47,6 @@ namespace YAPA
 
             this.DataContext = this;
             _showSettings = new ShowSettings(this);
-            TextBrush = Brushes.Black;
-            _clockOpacity = .6;
-            _shadowOpacity = 0.6;
-            _workTime = 25;
-            _breakTime = 5;
-            _breakLongTime = 15;
-            _soundEfects = true;
             Ticks = 0;
             Period = 0;
             IsBreak = false;
@@ -81,20 +58,55 @@ namespace YAPA
             dispacherTime.Tick += new EventHandler(DoTick);
             dispacherTime.Interval = new TimeSpan(0, 0, 0, 1);
 
+            // default position only for first run
             // position the clock at top / right, primary screen
-            this.Left = SystemParameters.PrimaryScreenWidth - this.Width - 15.0;
+            if (YAPA.Properties.Settings.Default.IsFirstRun)
+            {
+                this.Left = SystemParameters.PrimaryScreenWidth - this.Width - 15.0;
+                this.Top = 0;
+            }
 
             // enable dragging
             this.MouseLeftButtonDown += MainWindow_MouseLeftButtonDown;
+
+            // save window position on close
+            this.Closing += MainWindow_Closing;
 
             // flash timer
             TimerFlush = (Storyboard)TryFindResource("FlashTimer");
 
             // play sounds
-            TickSound = new System.Media.SoundPlayer(@"tick.wav");
-            RingSound = new System.Media.SoundPlayer(@"ding.wav");
+            TickSound = new System.Media.SoundPlayer(AppDomain.CurrentDomain.BaseDirectory + @"\Resources\tick.wav");
+            RingSound = new System.Media.SoundPlayer(AppDomain.CurrentDomain.BaseDirectory + @"\Resources\ding.wav");
 
             Loaded += new RoutedEventHandler(MainWindow_Loaded);
+        }
+
+        private int Period
+        {
+            get
+            {
+                return _period;
+            }
+            set
+            {
+                //Pomodoro completed
+                if (value - _period == 1)
+                {
+                    itemRepository.CompletePomodoro();
+                }
+                _period = value;
+            }
+        }
+
+        void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (YAPA.Properties.Settings.Default.IsFirstRun)
+            {
+                YAPA.Properties.Settings.Default.IsFirstRun = false;
+            }
+
+            YAPA.Properties.Settings.Default.Save();
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -169,10 +181,10 @@ namespace YAPA
 
         public Brush TextBrush
         {
-            get { return _textBrush; }
+            get { return new BrushConverter().ConvertFromString(YAPA.Properties.Settings.Default.TextBrush) as SolidColorBrush; }
             set
             {
-                _textBrush = value;
+                YAPA.Properties.Settings.Default.TextBrush = value.ToString();
                 RaisePropertyChanged("TextBrush");
                 RaisePropertyChanged("TextShadowColor");
                 RaisePropertyChanged("MouseOverBackgroundColor");
@@ -185,7 +197,7 @@ namespace YAPA
             {
                 var shadowColor = Colors.White;
 
-                if (TextBrush == Brushes.White)
+                if (TextBrush.ToString() == Brushes.White.ToString())
                 {
                     shadowColor = Colors.Black;
                 }
@@ -208,7 +220,7 @@ namespace YAPA
             {
                 var mouseOverBackgroundColor = Brushes.White;
 
-                if (TextBrush == Brushes.White)
+                if (TextBrush.ToString() == Brushes.White.ToString())
                 {
                     mouseOverBackgroundColor = Brushes.Black;
                 }
@@ -225,62 +237,62 @@ namespace YAPA
         }
 
 
-        public bool SoundEfects
+        public bool SoundEffects
         {
-            get { return _soundEfects; }
+            get { return YAPA.Properties.Settings.Default.SoundNotification; }
             set
             {
-                _soundEfects = value;
+                YAPA.Properties.Settings.Default.SoundNotification = value;
                 RaisePropertyChanged("UseSoundEfects");
             }
         }
 
         public double ClockOpacity
         {
-            get { return _clockOpacity; }
+            get { return YAPA.Properties.Settings.Default.OpacityLevel; }
             set
             {
-                _clockOpacity = value;
+                YAPA.Properties.Settings.Default.OpacityLevel = value;
                 RaisePropertyChanged("ClockOpacity");
             }
         }
 
         public double ShadowOpacity
         {
-            get { return _shadowOpacity; }
+            get { return YAPA.Properties.Settings.Default.ShadowOpacityLevel; }
             set
             {
-                _shadowOpacity = value;
+                YAPA.Properties.Settings.Default.ShadowOpacityLevel = value;
                 RaisePropertyChanged("ShadowOpacity");
             }
         }
 
         public int WorkTime
         {
-            get { return _workTime; }
+            get { return YAPA.Properties.Settings.Default.PeriodWork; }
             set
             {
-                _workTime = value;
+                YAPA.Properties.Settings.Default.PeriodWork = value;
                 RaisePropertyChanged("WorkTime");
             }
         }
 
         public int BreakTime
         {
-            get { return _breakTime; }
+            get { return YAPA.Properties.Settings.Default.PeriodShortBreak; }
             set
             {
-                _breakTime = value;
+                YAPA.Properties.Settings.Default.PeriodShortBreak = value;
                 RaisePropertyChanged("BreakTime");
             }
         }
 
         public int BreakLongTime
         {
-            get { return _breakLongTime; }
+            get { return YAPA.Properties.Settings.Default.PeriodLongBreak; }
             set
             {
-                _breakLongTime = value;
+                YAPA.Properties.Settings.Default.PeriodLongBreak = value;
                 RaisePropertyChanged("BreakLongTime");
             }
         }
@@ -305,27 +317,36 @@ namespace YAPA
             }
         }
 
+        public string CurrentTimeValue 
+        {
+            set
+            {
+                CurrentTime.Text = value;
+                this.Title = String.Format("YAPA - {0}", value);
+            }
+        }
+
         void DoTick(object sender, EventArgs e)
         {
             if (stopWatch.IsRunning)
             {
                 TimeSpan ts = stopWatch.Elapsed;
                 string currentTime = String.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
-                CurrentTime.Text = currentTime;
+                CurrentTimeValue = currentTime;
                 CurrentPeriod.Text = Period.ToString();
                 Ticks++;
                 if (IsWork)
-                    StartTicking(_workTime, Ticks);
+                    StartTicking(WorkTime, Ticks);
                 else if (IsBreak)
-                    StartTicking(_breakTime, Ticks);
+                    StartTicking(BreakTime, Ticks);
                 else if (IsBreakLong)
-                    StartTicking(_breakLongTime, Ticks);
+                    StartTicking(BreakLongTime, Ticks);
             }
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-            if (_soundEfects)
+            if (SoundEffects)
                 TickSound.Play();
             TimerFlush.Stop(this);
             if (stopWatch.IsRunning)
@@ -344,7 +365,7 @@ namespace YAPA
 
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
-            if (_soundEfects)
+            if (SoundEffects)
             {
                 TickSound.Stop();
                 RingSound.Stop();
@@ -373,7 +394,7 @@ namespace YAPA
 
         private void StopTicking()
         {
-            if (_soundEfects)
+            if (SoundEffects)
                 RingSound.Play();
             TimerFlush.Begin(this, true);
             stopWatch.Reset();
@@ -381,7 +402,7 @@ namespace YAPA
             ProgressState = "Error";
             if (IsWork)
             {
-                CurrentTime.Text = BreakLabel;
+                CurrentTimeValue = BreakLabel;
                 IsWork = false;
                 if (Period == 4)
                 {
@@ -393,7 +414,7 @@ namespace YAPA
             }
             else
             {
-                CurrentTime.Text = WorkLabel;
+                CurrentTimeValue = WorkLabel;
                 IsBreak = false;
                 IsBreakLong = false;
                 IsWork = true;
@@ -410,7 +431,7 @@ namespace YAPA
             TimerFlush.Stop(this);
             stopWatch.Reset();
             dispacherTime.Stop();
-            CurrentTime.Text = "00:00";
+            CurrentTimeValue = "00:00";
             CurrentPeriod.Text = "";
             Period = 0;
             IsBreak = false;
@@ -455,7 +476,7 @@ namespace YAPA
                 {
                     if (!stopWatch.IsRunning)
                     {
-                        if (_soundEfects)
+                        if (SoundEffects)
                             TickSound.Play();
                         TimerFlush.Stop(this);
                         stopWatch.Start();
@@ -466,7 +487,7 @@ namespace YAPA
                 }
                 else if ((args[1].ToLowerInvariant() == "/pause"))
                 {
-                    if (_soundEfects)
+                    if (SoundEffects)
                     {
                         TickSound.Stop();
                         RingSound.Stop();
@@ -482,7 +503,7 @@ namespace YAPA
                 {
                     if (stopWatch.IsRunning)
                     {
-                        if (_soundEfects)
+                        if (SoundEffects)
                             TickSound.Play();
                         Ticks = 0;
                         stopWatch.Restart();
@@ -505,7 +526,31 @@ namespace YAPA
             return true;
         }
 
+        private void Exit_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (stopWatch.IsRunning)
+            {
+                if (System.Windows.MessageBox.Show("Are you sure you want to exit and cancel pomodoro ?", "Cancel pomodoro", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+            this.Close();
+        }
 
+        private void Minimize_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
 
+        private void MainWindow_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            MinExitPanel.Visibility = Visibility.Visible;
+        }
+
+        private void MainWindow_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            MinExitPanel.Visibility = Visibility.Hidden;
+        }
     }
 }
