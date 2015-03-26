@@ -15,6 +15,7 @@
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
+        Closing="SettingsWindow_Closing"
         AllowsTransparency="True">
     <Grid Background="Transparent">
         <Border Margin="10">
@@ -110,7 +111,7 @@
                 </StackPanel>
                 <Button x:Name="btnClose"
             		Command="{Binding SaveSettings}"
-            		Content="Save"
+            		Content="Done"
             		Cursor="Hand"
             		ToolTip="Save settings"
             		Margin="351,421,10,10" RenderTransformOrigin="0.478,0.513">

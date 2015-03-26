@@ -31,10 +31,34 @@ namespace YAPA
         // INPC support
         public event PropertyChangedEventHandler PropertyChanged;
 
+        // Singleton properties
+        private static Settings _settings = null;
+        private static object _singletonLock = new object();
+
         /// <summary>
-        /// Window constructor.
+        /// Singleton create method
         /// </summary>
-        public  Settings(IMainViewModel host, double currentOpacity, Brush currentTextColor, int workTime, int breakTime, int breakLongTime, bool soundEfects, double shadowOpacity, bool countBackwards)
+        public static Settings CreateSettings(IMainViewModel host, double currentOpacity, Brush currentTextColor, int workTime, int breakTime, int breakLongTime, bool soundEfects, double shadowOpacity, bool countBackwards)
+        {
+            lock(_singletonLock)
+            {
+                if (_settings == null)
+                {
+                    _settings = new Settings(host, currentOpacity, currentTextColor, workTime, breakTime, breakLongTime, soundEfects, shadowOpacity, countBackwards);
+                    _settings.ShowDialog();
+                }
+                else
+                {
+                    _settings.Activate();
+                }
+                return _settings;
+            }
+        }
+
+        /// <summary>
+        /// Pravate window constructor.
+        /// </summary>
+        private Settings(IMainViewModel host, double currentOpacity, Brush currentTextColor, int workTime, int breakTime, int breakLongTime, bool soundEfects, double shadowOpacity, bool countBackwards)
         {
             InitializeComponent();
             this.DataContext = this;
@@ -83,6 +107,7 @@ namespace YAPA
                     LoadingPanel.Visibility = Visibility.Collapsed;
                 });
             });
+            Activate();
         }
 
         private  PomodoroLevelEnum GetLevelFromCount(int count, int maxCount)
@@ -127,6 +152,18 @@ namespace YAPA
         public void CloseSettings()
         {
             this.Close();
+        }
+
+        /// <summary>
+        /// Regardless of how we close the window we want to be able to null out the singleton, this allows use to
+        /// recreate the window next time we reopen it. 
+        /// </summary>
+        void SettingsWindow_Closing(object sender, CancelEventArgs e)
+        {
+            lock(_singletonLock)
+            {
+                _settings = null;
+            }
         }
 
         /// <summary>
