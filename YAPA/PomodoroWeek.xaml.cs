@@ -33,7 +33,7 @@ namespace YAPA
             if (week.Count() < 7)
             {
                 var firstDay = week.Min(x => x.DateTime);
-                if (firstDay.DayOfWeek != DayOfWeek.Monday)
+                if (firstDay.DayOfWeek != DayOfWeek.Sunday)
                 {
                     for (int i = 0; i < 7 - week.Count(); i++)
                     {
