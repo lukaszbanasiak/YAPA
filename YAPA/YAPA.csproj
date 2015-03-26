@@ -164,24 +164,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\backward.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <Content Include="Resources\ding.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\pause.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\preferences.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\start.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\stop.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\loader.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

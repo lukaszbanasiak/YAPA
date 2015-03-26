@@ -58,7 +58,7 @@ namespace YAPA
             WorkLabel = "work";
 
             dispacherTime.Tick += new EventHandler(DoTick);
-            dispacherTime.Interval = new TimeSpan(0, 0, 0, 1);
+            dispacherTime.Interval = new TimeSpan(0, 0, 0, 0, 250);
 
             // enable dragging
             this.MouseLeftButtonDown += MainWindow_MouseLeftButtonDown;
