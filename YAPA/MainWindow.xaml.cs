@@ -672,9 +672,15 @@ namespace YAPA
 
         private void MainWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            base.OnMouseLeftButtonDown(e);
-            DragMove();
-            e.Handled = true;
+            try
+            {
+                base.OnMouseLeftButtonDown(e);
+                DragMove();
+                e.Handled = true;
+            }
+            catch
+            {
+            }
         }
 
         /// <summary>
