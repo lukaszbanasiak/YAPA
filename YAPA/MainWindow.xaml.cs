@@ -528,6 +528,19 @@ namespace YAPA
             }
         }
 
+        public bool AutoStartBreak
+        {
+            get
+            {
+                return Properties.Settings.Default.AutoStartBreak;
+            }
+            set
+            {
+                Properties.Settings.Default.AutoStartBreak = value;
+                RaisePropertyChanged("AutoStartBreak");
+            }
+        }
+
         public string ProgressState
         {
             get { return _progressState; }
@@ -639,12 +652,19 @@ namespace YAPA
             if (Increment >= _totalTime)
             {
                 _ticks = 0;
+
                 if (_isWork)
                 {
                     _itemRepository.CompletePomodoro();
                 }
+
                 StopTicking();
                 PauseMusic();
+
+                if (!_isWork && AutoStartBreak)
+                {
+                    Start_Click(this, null);
+                }
             }
         }
 

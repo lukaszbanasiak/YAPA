@@ -286,5 +286,17 @@ namespace YAPA.Properties {
                 this["RepeatBreakMusic"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoStartBreak {
+            get {
+                return ((bool)(this["AutoStartBreak"]));
+            }
+            set {
+                this["AutoStartBreak"] = value;
+            }
+        }
     }
 }

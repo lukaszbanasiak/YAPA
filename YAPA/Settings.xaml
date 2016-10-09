@@ -92,6 +92,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
                             <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding SoundEfects, Mode=TwoWay}" >
@@ -106,6 +107,10 @@
                             </CheckBox>
                             <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding MinimizeToTray, Mode=TwoWay}" >
                                 <Label Margin="0,-5" Content="Minimize to tray"/>
+                            </CheckBox>
+
+                            <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding AutoStartBreak, Mode=TwoWay}" >
+                                <Label Margin="0,-5" Content="Auto start break"/>
                             </CheckBox>
                         </Grid>
                         <Grid Margin="0,10,0,0">

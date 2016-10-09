@@ -80,5 +80,6 @@ namespace YAPA
         string BreakMusic { get; set; }
 
         bool RepeatBreakMusic { get; set; }
+        bool AutoStartBreak { get; set; }
     }
 }

@@ -33,6 +33,7 @@ namespace YAPA
         private bool _repeatWorkMusic;
         private string _breakMusic;
         private bool _repeatBreakMusic;
+        private bool _autoStartBreak;
 
         // INPC support
         public event PropertyChangedEventHandler PropertyChanged;
@@ -40,7 +41,7 @@ namespace YAPA
         /// <summary>
         /// Window constructor.
         /// </summary>
-        public Settings(IMainViewModel host, double currentOpacity, Brush currentTextColor, int workTime, int breakTime, int breakLongTime, bool soundEfects, double shadowOpacity, bool countBackwards, bool minimizeToTray, string workMusic, string breakMusic, bool repeatWorkMusic, bool repeatBreakMusic)
+        public Settings(IMainViewModel host, double currentOpacity, Brush currentTextColor, int workTime, int breakTime, int breakLongTime, bool soundEfects, double shadowOpacity, bool countBackwards, bool minimizeToTray, string workMusic, string breakMusic, bool repeatWorkMusic, bool repeatBreakMusic, bool autoStartBreak)
         {
             InitializeComponent();
             DataContext = this;
@@ -62,6 +63,7 @@ namespace YAPA
             _breakMusic = breakMusic;
             _repeatBreakMusic = repeatBreakMusic;
             _repeatWorkMusic = repeatWorkMusic;
+            _autoStartBreak = autoStartBreak;
 
             Loaded += Settings_Loaded;
 
@@ -292,6 +294,19 @@ namespace YAPA
             }
         }
 
+        public bool AutoStartBreak
+        {
+            get
+            {
+                return _autoStartBreak;
+            }
+            set
+            {
+                _autoStartBreak = value;
+                _host.AutoStartBreak = value;
+                RaisePropertyChanged("AutoStartBreak");
+            }
+        }
 
         public bool MinimizeToTray
         {
