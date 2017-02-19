@@ -2,11 +2,13 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -77,6 +79,15 @@ namespace YAPA
             {
                 var dfi = DateTimeFormatInfo.CurrentInfo;
                 var cal = dfi.Calendar;
+
+                var hasCompletedPomodoro = _itemRepository.GetAllPomodoros().Any();
+                if (hasCompletedPomodoro)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        ExportData.Visibility = Visibility.Visible;
+                    });
+                }
 
                 var pomodoros =
                     _itemRepository.GetPomodoros()
@@ -388,7 +399,30 @@ namespace YAPA
                 BreakMusic = fileName;
             }
         }
+
+        private void ExportDataClick(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "CSV (*.csv)|",
+                AddExtension = true,
+                DefaultExt = "csv"
+            };
+
+            if (saveFileDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+
+            using (var stream = saveFileDialog.OpenFile())
+            {
+                var pomodoros = _itemRepository.GetAllPomodoros();
+                using (var writer = new StreamWriter(stream))
+                {
+                    foreach (var pomodoro in pomodoros)
+                    {
+                        writer.WriteLine($"{pomodoro.DateTime.Date},{pomodoro.Count}");
+                    }
+                }
+                stream.Close();
+            }
+        }
     }
-
-
 }

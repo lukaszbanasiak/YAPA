@@ -29,6 +29,11 @@ namespace YAPA
             context.SaveChanges();
         }
 
+        public IEnumerable<PomodoroEntity> GetAllPomodoros()
+        {
+            return context.Pomodoros;
+        }
+
         public IEnumerable<PomodoroEntity> GetPomodoros()
         {
             var days = 190;
