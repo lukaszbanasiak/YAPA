@@ -15,7 +15,8 @@
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
-        AllowsTransparency="True">
+        AllowsTransparency="True"
+        Closing="Settings_Closing">
     <Grid Background="Transparent">
         <Border Margin="10">
             <Border.Effect>

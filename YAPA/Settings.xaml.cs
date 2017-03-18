@@ -37,6 +37,7 @@ namespace YAPA
         private string _breakMusic;
         private bool _repeatBreakMusic;
         private bool _autoStartBreak;
+        private bool _isDirty;
 
         // INPC support
         public event PropertyChangedEventHandler PropertyChanged;
@@ -68,6 +69,7 @@ namespace YAPA
             _repeatBreakMusic = repeatBreakMusic;
             _repeatWorkMusic = repeatWorkMusic;
             _autoStartBreak = autoStartBreak;
+            _isDirty = false;
 
             Loaded += Settings_Loaded;
 
@@ -115,6 +117,41 @@ namespace YAPA
                     LoadingPanel.Visibility = Visibility.Collapsed;
                 });
             });
+        }
+
+        /// <summary>
+        /// Overrides Windows.Closing-Event
+        /// If windows is closed with Alt+F4 ask the user if he really want to dismiss the date
+        /// The MsgBox is not shown, if the Settings window was Saved() or Dismissed()
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void Settings_Closing(object sender, CancelEventArgs e)
+        {
+#if DEBUG
+            System.Windows.MessageBox.Show("Closing called");
+#endif
+            // If data is dirty, notify user and ask for a response
+            if (_isDirty)
+            {
+                string msg = "Settings changed. Close without saving?";
+                MessageBoxResult result =
+                  System.Windows.MessageBox.Show(
+                    msg,
+                    "YAPA Settings",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+                if (result == MessageBoxResult.No)
+                {
+                    // If user doesn't want to close, cancel closure
+                    e.Cancel = true;
+                }
+                else
+                {
+                    //restore settings and continue with closure
+                    Properties.Settings.Default.Reload();
+                }
+            }
         }
 
         private PomodoroLevelEnum GetLevelFromCount(int count, int maxCount)
@@ -351,6 +388,19 @@ namespace YAPA
             get { return _dismissSettings; }
         }
 
+        public bool IsDirty
+        {
+            get
+            {
+                return _isDirty;
+            }
+
+            set
+            {
+                _isDirty = value;
+            }
+        }
+
         /// <summary>
         /// Used to raise change notifications to other consumers.
         /// </summary>
@@ -359,6 +409,7 @@ namespace YAPA
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propName));
+                _isDirty = true;
             }
         }
 

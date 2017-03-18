@@ -38,6 +38,7 @@ namespace YAPA
         public void Execute(object parameter)
         {
             Properties.Settings.Default.Save();
+            _host.IsDirty = false;
             _host.CloseSettings();
         }
     }
