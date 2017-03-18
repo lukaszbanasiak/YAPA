@@ -79,6 +79,8 @@ namespace YAPA
 
         private async void Settings_Loaded(object sender, RoutedEventArgs e)
         {
+            this.Activate();
+
             await Task.Run(() =>
             {
                 var dfi = DateTimeFormatInfo.CurrentInfo;
