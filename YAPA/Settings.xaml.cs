@@ -21,6 +21,7 @@ namespace YAPA
     {
         private IMainViewModel _host;
         private ICommand _saveSettings;
+        private ICommand _dismissSettings;
         private double _clockOpacity;
         private double _shadowOpacity;
         private bool _useWhiteText;
@@ -52,6 +53,7 @@ namespace YAPA
             _soundEfects = soundEfects;
             _clockOpacity = currentOpacity;
             _saveSettings = new SaveSettings(this);
+            _dismissSettings = new DismissSettings(this);
             _useWhiteText = (currentTextColor.ToString() == Brushes.White.ToString());
             _breakTime = breakTime;
             _breakLongTime = breakLongTime;
@@ -339,6 +341,14 @@ namespace YAPA
         public ICommand SaveSettings
         {
             get { return _saveSettings; }
+        }
+
+        /// <summary>
+        /// Command invoked when user clicks 'Close'
+        /// </summary>
+        public ICommand DismissSettings
+        {
+            get { return _dismissSettings; }
         }
 
         /// <summary>

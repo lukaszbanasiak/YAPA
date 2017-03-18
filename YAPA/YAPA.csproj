@@ -75,7 +75,7 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
-   <PropertyGroup>
+  <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <ItemGroup>
@@ -128,6 +128,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="DatabaseContext.cs" />
+    <Compile Include="DismissSettings.cs" />
     <Compile Include="IMainViewModel.cs" />
     <Compile Include="ISettingsViewModel.cs" />
     <Compile Include="ItemRepository.cs" />
