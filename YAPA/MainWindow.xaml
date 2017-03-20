@@ -210,28 +210,54 @@
                 </Button.Effect>
             </Button>
 
-            <TextBlock x:Name="CurrentPeriod"
-                   Cursor="Arrow"
-                   FontFamily="Segoe UI"
-                   FontStretch="UltraCondensed"
-                   FontSize="16"
-                   Foreground="{Binding TextBrush}"
-                   Opacity="{Binding ClockOpacity}"
-                   HorizontalAlignment="Right" 
-                   VerticalAlignment="Center"
-                   Height="20" 
-                   Text=""
-                   ToolTip="Current period"
-                   Width="20" >
-                <TextBlock.Effect>
-                    <DropShadowEffect
-				  ShadowDepth="0"
-				  Direction="0"
-				  Color="{Binding TextShadowColor}"
-				  Opacity="{Binding ShadowOpacity}"
-				  BlurRadius="10" />
-                </TextBlock.Effect>
-            </TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <!-- Session icon -->
+                <TextBlock x:Name="CurrentPeriodIcon"
+                    Cursor="Arrow"
+                    FontFamily="/YAPA;component/Fonts/#FontAwesome"                   
+                    FontSize="14"
+                    Foreground="{Binding TextBrush}"
+                    Opacity="{Binding ClockOpacity}"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    TextAlignment="Center"
+                    Padding="3,4,0,0"                             
+                    Height="20"
+                    Width="20"
+                    Text="">
+                    <TextBlock.Effect>
+                        <DropShadowEffect
+				        ShadowDepth="0"
+				        Direction="0"
+				        Color="{Binding TextShadowColor}"
+				        Opacity="{Binding ShadowOpacity}"
+				        BlurRadius="10" />
+                    </TextBlock.Effect>
+                </TextBlock>
+                <!-- Session counter -->
+                <TextBlock x:Name="CurrentPeriod"
+                        Cursor="Arrow"
+                        FontFamily="Segoe UI"
+                        FontStretch="UltraCondensed"
+                        FontSize="16"
+                        Foreground="{Binding TextBrush}"
+                        Opacity="{Binding ClockOpacity}"
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Center"
+                        Text=""
+                        ToolTip="Current period"
+                        Padding="2,0,0,0"
+                        Width="20" >
+                    <TextBlock.Effect>
+                        <DropShadowEffect
+				        ShadowDepth="0"
+				        Direction="0"
+				        Color="{Binding TextShadowColor}"
+				        Opacity="{Binding ShadowOpacity}"
+				        BlurRadius="10" />
+                    </TextBlock.Effect>
+                </TextBlock>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

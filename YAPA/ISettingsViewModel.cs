@@ -13,6 +13,11 @@ namespace YAPA
         void CloseSettings();
 
         /// <summary>
+        /// Indicates if data is dirty
+        /// </summary>
+        bool IsDirty { get; set; }
+
+        /// <summary>
         /// The desired opacity of the 
         /// </summary>
         double ClockOpacity { get; set; }

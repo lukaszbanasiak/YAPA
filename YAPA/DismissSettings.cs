@@ -4,9 +4,9 @@ using System.Windows.Input;
 namespace YAPA
 {
     /// <summary>
-    /// Command used to support saving the new settings.
+    /// Command used to support close & dismissing changes to the settings.
     /// </summary>
-    public class SaveSettings : ICommand
+    class DismissSettings : ICommand
     {
         private ISettingsViewModel _host;
 
@@ -14,7 +14,7 @@ namespace YAPA
         /// Creates a new instance of this command.
         /// </summary>
         /// <param name="host">The hosting Window control</param>
-        public SaveSettings(ISettingsViewModel host)
+        public DismissSettings(ISettingsViewModel host)
         {
             _host = host;
         }
@@ -37,7 +37,7 @@ namespace YAPA
         /// </summary>
         public void Execute(object parameter)
         {
-            Properties.Settings.Default.Save();
+            Properties.Settings.Default.Reload();
             _host.IsDirty = false;
             _host.CloseSettings();
         }
