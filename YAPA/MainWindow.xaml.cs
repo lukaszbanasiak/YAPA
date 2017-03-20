@@ -392,7 +392,6 @@ namespace YAPA
             }
         }
 
-
         public bool SoundEffects
         {
             get { return Properties.Settings.Default.SoundNotification; }
@@ -618,7 +617,14 @@ namespace YAPA
                 _stopWatch.Start();
                 _dispacherTime.Start();
                 if (_isWork)
+                {
                     _period++;
+                    CurrentPeriodIcon.Text = Const.ICON_PERIOD_POMODORO;
+                }
+                if(_isBreak)
+                    CurrentPeriodIcon.Text = Const.ICON_PERIOD_BREAK;
+                if (_isBreakLong)
+                    CurrentPeriodIcon.Text = Const.ICON_PERIOD_BREAK_LONG;
             }
         }
 
@@ -635,12 +641,14 @@ namespace YAPA
                 _period--;
                 _stopWatch.Stop();
                 ProgressState = "Paused";
+                CurrentPeriodIcon.Text = Const.ICON_PAUSE;
                 PauseMusic();
             }
             else
             {
                 ResetTicking();
                 PlayMusic(false);
+                CurrentPeriodIcon.Text = Const.ICON_PERIOD_STOPPED;
             }
         }
 

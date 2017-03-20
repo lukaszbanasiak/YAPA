@@ -123,16 +123,15 @@ namespace YAPA
 
         /// <summary>
         /// Overrides Windows.Closing-Event
-        /// If windows is closed with Alt+F4 ask the user if he really want to dismiss the date
+        /// If windows is closed with Alt+F4 ask the user if he really want to dismiss the changes
         /// The MsgBox is not shown, if the Settings window was Saved() or Dismissed()
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void Settings_Closing(object sender, CancelEventArgs e)
         {
-#if DEBUG
-            System.Windows.MessageBox.Show("Closing called");
-#endif
+            Debug.WriteLine("Closing called");
+
             // If data is dirty, notify user and ask for a response
             if (_isDirty)
             {

@@ -127,6 +127,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Const.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="DismissSettings.cs" />
     <Compile Include="IMainViewModel.cs" />
@@ -180,6 +181,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\fontawesome-webfont.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <None Include="IconSet.res" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
