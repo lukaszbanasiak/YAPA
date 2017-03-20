@@ -148,6 +148,8 @@ namespace YAPA
 
         private void MainWindow_StateChanged(object sender, EventArgs e)
         {
+            GetMainWindowPosAndSaveSettings();
+
             if (this.WindowState == WindowState.Minimized && MinimizeToTray == true && Properties.Settings.Default.ShowInTaskbar)
             {
                 Hide();
@@ -175,14 +177,19 @@ namespace YAPA
                 Properties.Settings.Default.IsFirstRun = false;
             }
 
+            GetMainWindowPosAndSaveSettings();
+
+            PauseMusic();
+        }
+
+        private void GetMainWindowPosAndSaveSettings()
+        {
             GDIScreen currentScreen = GDIScreen.FromHandle(new WindowInteropHelper(this).Handle);
 
             Properties.Settings.Default.CurrentScreenHeight = currentScreen.WorkingArea.Height;
             Properties.Settings.Default.CurrentScreenWidth = currentScreen.WorkingArea.Width;
 
             Properties.Settings.Default.Save();
-
-            PauseMusic();
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -763,6 +770,7 @@ namespace YAPA
 
         private void Window_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
+            GetMainWindowPosAndSaveSettings();
             ShowSettings.Execute(this);
         }
 
