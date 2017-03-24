@@ -206,8 +206,8 @@ namespace YAPA
             var screenChanged = (currentScreen.WorkingArea.Height != Properties.Settings.Default.CurrentScreenHeight ||
                                 currentScreen.WorkingArea.Width != Properties.Settings.Default.CurrentScreenWidth);
 
-            var offScreen = (currentScreen.WorkingArea.Height < Properties.Settings.Default.WindowTop ||
-                               currentScreen.WorkingArea.Width < Properties.Settings.Default.WindowLeft);
+            var offScreen = (Properties.Settings.Default.WindowTop < 0 || Properties.Settings.Default.WindowTop > currentScreen.WorkingArea.Height ||
+                            Properties.Settings.Default.WindowLeft < 0 || Properties.Settings.Default.WindowLeft > currentScreen.WorkingArea.Width);
 
             // default position only for first run or when screen size changes
             // position the clock at top / right, primary screen
