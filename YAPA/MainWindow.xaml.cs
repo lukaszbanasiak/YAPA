@@ -94,7 +94,7 @@ namespace YAPA
             Loaded += MainWindow_Loaded;
             StateChanged += MainWindow_StateChanged;
 
-            this.ShowInTaskbar = Properties.Settings.Default.ShowInTaskbar;
+            ShowInTaskbar = Properties.Settings.Default.ShowInTaskbar;
 
             WorkTrayIconColor = (System.Drawing.Color)System.Drawing.ColorTranslator.FromHtml(Properties.Settings.Default.WorkTrayIconColor);
             BreakTrayIconColor = (System.Drawing.Color)System.Drawing.ColorTranslator.FromHtml(Properties.Settings.Default.BreakTrayIconColor);
@@ -224,6 +224,12 @@ namespace YAPA
             sysTrayIcon.DoubleClick += SysTrayIcon_DoubleClick;
 
             sysTrayIcon.ContextMenu = new System.Windows.Forms.ContextMenu(CreateNotifyIconContextMenu());
+
+            if (Properties.Settings.Default.StartInSystemTray)
+            {
+                Hide();
+                sysTrayIcon.Visible = true;
+            }
         }
 
         private System.Windows.Forms.MenuItem[] CreateNotifyIconContextMenu()
