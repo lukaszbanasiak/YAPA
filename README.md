@@ -1,9 +1,8 @@
-YAPA
-====
+# YAPA - no longer maintained!
 
-YAPA is minimalistic desktop timer app for Pomodoro Technique users. 
+For updates and new releases go to [YAPA 2.0](https://github.com/YetAnotherPomodoroApp/YAPA-2)
 
-![Main window](http://banasiak.me/wp-content/uploads/2013/06/yapa_main_info.png)
+----
 
 Features:
 ---------
